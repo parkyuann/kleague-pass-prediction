@@ -1,0 +1,22 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# 데이터 파일 (절대 올리지 말 것!)
+data/raw/*.csv
+data/raw/*.xlsx
+*.csv
+*.xlsx
+*.h5
+*.pkl
+
+# 노트북 체크포인트
+.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+
+# 로그
+logs/*.log
