@@ -1,22 +1,28 @@
-# Python
-venv/
-__pycache__/
-*.pyc
-
-# 데이터 파일 (절대 올리지 말 것!)
-data/raw/*.csv
-data/raw/*.xlsx
+# 데이터
+data/raw/*
+data/processed/*
+data/interim/*
 *.csv
 *.xlsx
-*.h5
-*.pkl
 
-# 노트북 체크포인트
-.ipynb_checkpoints
+# 모델
+models/*.pkl
+models/*.h5
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 환경
+venv/
+.env
 
 # IDE
 .vscode/
 .idea/
+*.swp
+.DS_Store
 
 # 로그
-logs/*.log
+logs/*
