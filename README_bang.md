@@ -82,7 +82,7 @@
 ## 📂 파일 구조 (File Structure)
 * `analyze_error.ipynb`: 문제 진단, 시각화 및 팀 클러스터링 코드
 * `calibration_logic.py`: 구역별 2차 함수 보정 및 LGBM 분류기 로직
-* `final_pipeline.py`: 데이터 로드부터 보정, 제출까지의 전체 파이프라인
+* `run_model.py`: 데이터 로드부터 보정, 제출까지의 전체 파이프라인
 
 ---
 **Author:** Chaeyoung  
