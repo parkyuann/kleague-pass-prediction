@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c:*)",
+      "Bash(python -m src.models.baseline:*)",
+      "Bash(python -m src.models.tuning:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m src.models.xgb_model:*)",
+      "Bash(python -m src.models.catboost_model:*)",
+      "Bash(python -m src.models.ensemble:*)",
+      "Bash(dir:*)",
+      "Bash(python -m src.models.deep_learning:*)",
+      "Bash(python -m src.models.lstm_model)",
+      "Bash(python -m src.models.sequence_models:*)",
+      "Bash(python train_lstm_transformer.py:*)",
+      "Bash(timeout:*)",
+      "Bash(python create_final_ensemble.py:*)",
+      "Bash(python -m src.features.feature_engineering_v3:*)",
+      "Bash(python train_v3_ensemble.py:*)",
+      "Bash(python train_conservative.py:*)",
+      "Bash(python analyze_features.py:*)",
+      "Bash(python:*)",
+      "Bash(del \"E:\\\\Dacon\\\\kleague-pass-prediction\\\\train_v3_pipeline.py\")",
+      "Bash(find:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}

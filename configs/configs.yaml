@@ -1,0 +1,171 @@
+# K리그 패스 예측 프로젝트 - 전역 설정
+# ==========================================
+
+# 경로 설정
+paths:
+  # 데이터 디렉토리
+  data_raw: "./data/raw"
+  data_processed: "./data/processed"
+  data_interim: "./data/interim"
+  
+  # 모델 저장 경로
+  models: "./models"
+  
+  # 제출 파일 경로
+  submissions: "./data/submissions"
+  
+  # 로그 디렉토리
+  logs: "./logs"
+
+# 데이터 설정
+data:
+  # 필드 크기 (FIFA 공식 규격)
+  field_length: 105
+  field_width: 68
+  
+  # 시퀀스 관련
+  max_seq_length: 100  # 딥러닝 모델용 최대 시퀀스 길이
+  recent_actions: 5    # 최근 N개 액션 피처
+  
+  # 랜덤 시드
+  random_seed: 42
+  
+  # 교차 검증
+  n_splits: 5
+  
+  # 타겟 컬럼
+  target_cols:
+    - end_x
+    - end_y
+
+# 피처 엔지니어링 설정
+features:
+  # 액션 타입 목록
+  action_types:
+    - Pass
+    - Carry
+    - Duel
+    - Recovery
+    - Interception
+    - Clearance
+    - Block
+    - Tackle
+    - Intervention
+  
+  # 결과 타입
+  result_types:
+    - Successful
+    - Unsuccessful
+    - NotApplicable
+  
+  # 범주형 피처 목록
+  categorical_features:
+    - recent_0_type
+    - recent_1_type
+    - recent_2_type
+    - recent_3_type
+    - recent_4_type
+  
+  # 생성할 피처 그룹
+  feature_groups:
+    basic: true          # 기본 공간/시간 피처
+    sequence: true       # 시퀀스 통계 피처
+    team: true          # 팀 점유/패턴 피처
+    player: true        # 선수별 피처
+    advanced: false     # 고급 피처 (v2 이후)
+
+# 머신러닝 모델 설정
+ml_models:
+  lightgbm:
+    # 기본 파라미터
+    params:
+      objective: regression
+      metric: rmse
+      boosting_type: gbdt
+      num_leaves: 63
+      learning_rate: 0.05
+      feature_fraction: 0.8
+      bagging_fraction: 0.8
+      bagging_freq: 5
+      verbose: -1
+      n_jobs: -1
+    
+    # 학습 설정
+    num_boost_round: 1000
+    early_stopping_rounds: 50
+    verbose_eval: 100
+  
+  xgboost:
+    params:
+      objective: reg:squarederror
+      eval_metric: rmse
+      max_depth: 6
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+      n_jobs: -1
+    
+    num_boost_round: 1000
+    early_stopping_rounds: 50
+
+# 딥러닝 모델 설정
+dl_models:
+  # 공통 설정
+  common:
+    max_seq_len: 100
+    batch_size: 64
+    epochs: 50
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    patience: 10
+    device: cuda  # cuda 또는 cpu
+  
+  # LSTM 모델
+  lstm:
+    hidden_dim: 128
+    num_layers: 2
+    dropout: 0.3
+    bidirectional: true
+  
+  # Transformer 모델
+  transformer:
+    d_model: 128
+    nhead: 8
+    num_layers: 3
+    dim_feedforward: 256
+    dropout: 0.3
+  
+  # Hybrid 모델
+  hybrid:
+    lstm_hidden: 128
+    lstm_layers: 2
+    transformer_layers: 2
+    nhead: 8
+    dropout: 0.3
+
+# 앙상블 설정
+ensemble:
+  # 모델별 가중치
+  weights:
+    lightgbm: 0.4
+    xgboost: 0.2
+    deep_learning: 0.4
+  
+  # 최적 가중치 탐색 여부
+  optimize_weights: true
+  weight_search_range: [0.0, 1.0, 0.05]  # [시작, 끝, 스텝]
+
+# 평가 설정
+evaluation:
+  metric: euclidean_distance  # 유클리드 거리
+  clip_range: [0, 100]        # 예측값 클리핑 범위
+
+# 실험 추적
+experiment:
+  track_experiments: true
+  save_predictions: true
+  save_models: true
+  
+  # 로깅
+  log_level: INFO
+  log_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
