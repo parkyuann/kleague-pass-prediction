@@ -21,8 +21,28 @@ K리그 경기 이벤트 로그를 활용해 마지막 패스 도착 좌표(end_
 | 비교 항목 | 트리 기반 앙상블 (v8_pipeline) | 딥러닝 시퀀스 모델 (v3) |
 | :---: | :---: | :---: |
 | **모델 구조** | LightGBM + XGBoost + CatBoost | GRU/LSTM 기반 Multi-task Model |
-| **핵심 전략** | 정교한 피처 엔지니어링 및 과적합 제어 | 경기 흐름(이벤트 시퀀스) 학습 시도 |
-| **결과** | **최종 채택 (높은 일반화 성능)** | 성능 실험 및 분석 수행 |
+| **핵심 전략** | **과적합 제어 및 다중 시드 앙상블** | 경기 흐름(이벤트 시퀀스) 학습 시도 |
+| **검증 점수** | **OOF Score: 14.4575 (최종 채택)** | 성능 실험 및 분석 수행 |
+
+### 🎯 V8 Pipeline: 과적합 완화 전략
+단순 점수 향상이 아닌, 모델의 일반화 성능(Generalization)을 극대화하기 위해 V8 버전에서 다음의 **과적합 완화 전략**을 적용했습니다.
+
+1. **피처 정제 (Feature Selection)**
+   - Dist shift가 크거나 노이즈가 심한 6개 피처 제거 (22개 → **16개**)
+   - `last_dist_to_goal`, `prev1_dist` 등 과적합 위험 요소 배제
+2. **정규화 및 하이퍼파라미터 최적화**
+   - **LightGBM**: `num_leaves` 하향 (63 → 31), `max_depth=5` 제한
+   - **Regularization**: `l2_leaf_reg=5` 적용 및 학습률(`learning_rate`) 최적화
+3. **다중 시드 앙상블 (Multi-seed Ensemble)**
+   - 7개의 서로 다른 Seed(42, 123, 456, 789, 1004, 2024, 3333) 활용
+   - 총 35개 모델(7 seeds × 5-folds)의 예측값을 결합하여 변동성 최소화
+4. **데이터 무결성 유지**
+   - `dy` 예측을 방해할 수 있는 Y-flip 데이터 증강을 제거하여 예측 정교도 향상
+
+### 📈 최종 검증 결과 (Validation Summary)
+- **Feature Count**: 16 Features
+- **Ensemble Strategy**: Soft Voting (LGBM + XGB + CatBoost)
+- **V8 OOF Score (Mean Euclidean Distance)**: <kbd>**14.4575**</kbd>
 
 <hr style="background-color: #30363d; height: 1px; border: none; width: 90%;">
 
