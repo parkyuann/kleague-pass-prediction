@@ -26,3 +26,6 @@ venv/
 
 # 로그
 logs/*
+
+# 학습 캐시
+catboost_info/
